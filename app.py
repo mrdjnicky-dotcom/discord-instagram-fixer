@@ -14,35 +14,38 @@ def home():
 
 @app.route('/webhook', methods=['POST'])
 def handle_instagram():
-    # Riceviamo i dati da IFTTT
-    data = request.json
-    if not data:
-        return jsonify({"error": "No JSON received"}), 400
-        
-    original_url = data.get('url', '')
-    
-    # Se non c'è URL, ci fermiamo
-    if not original_url:
-        return jsonify({"error": "No URL found"}), 400
+    # STAMPA TUTTO QUELLO CHE ARRIVA (DEBUG)
+    print("Dati ricevuti grezzi:", request.data)
+    try:
+        data = request.json
+        print("JSON parsato:", data)
+    except:
+        print("Errore nel parsing JSON")
+        data = {}
 
-    # LA CORREZIONE: Sostituiamo il dominio
-    # Supportiamo sia instagram.com che instagr.am
+    # Se non troviamo l'url, usiamo un link di fallback per TESTARE DISCORD
+    original_url = data.get('url', 'https://instagram.com/p/LINK-DI-EMERGENZA-TEST')
+    
+    print(f"URL elaborato: {original_url}")
+
+    # LA CORREZIONE
     fixed_url = original_url.replace("instagram.com", "eeinstagram.com").replace("instagr.am", "eeinstagram.com")
     
-    # Creiamo il messaggio per Discord
     payload = {
-        "content": f"Nuovo post di Romagnoli Esports! 📸\n{fixed_url}"
+        "content": f"Nuovo post (DEBUG)! 📸\n{fixed_url}"
     }
     
     # Inviamo a Discord
+    print(f"Tentativo invio a Discord a: {DISCORD_WEBHOOK_URL}")
     try:
-        print(f"Tentativo invio a Discord: {payload}")  # Debug 1
         r = requests.post(DISCORD_WEBHOOK_URL, json=payload)
-        print(f"Risposta Discord: {r.status_code} - {r.text}")  # Debug 2: FONDAMENTALE
+        print(f"Risposta Discord: {r.status_code} - {r.text}")
         r.raise_for_status()
     except Exception as e:
         print(f"Errore invio Discord: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
+    
+    return jsonify({"status": "success", "fixed_url": fixed_url}), 200
 
 
 if __name__ == '__main__':
