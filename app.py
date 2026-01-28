@@ -36,13 +36,14 @@ def handle_instagram():
     
     # Inviamo a Discord
     try:
+        print(f"Tentativo invio a Discord: {payload}")  # Debug 1
         r = requests.post(DISCORD_WEBHOOK_URL, json=payload)
+        print(f"Risposta Discord: {r.status_code} - {r.text}")  # Debug 2: FONDAMENTALE
         r.raise_for_status()
     except Exception as e:
         print(f"Errore invio Discord: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
-    
-    return jsonify({"status": "success", "fixed_url": fixed_url}), 200
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10000)
