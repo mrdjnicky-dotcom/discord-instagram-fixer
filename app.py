@@ -32,7 +32,7 @@ def handle_instagram():
     fixed_url = original_url.replace("instagram.com", "eeinstagram.com").replace("instagr.am", "eeinstagram.com")
     
     payload = {
-        "content": f"Nuovo post (DEBUG)! 📸\n{fixed_url}"
+        "content": f"Nuovo post di Romagnoli Esports! 📸\n{fixed_url}"
     }
     
     # Inviamo a Discord
