@@ -24,7 +24,7 @@ def handle_instagram():
         data = {}
 
     # Se non troviamo l'url, usiamo un link di fallback per TESTARE DISCORD
-    original_url = data.get('url', 'https://instagram.com/p/LINK-DI-EMERGENZA-TEST')
+    original_url = data.get('url', 'https://www.instagram.com/p/DUGAQeQjPEf/')
     
     print(f"URL elaborato: {original_url}")
 
